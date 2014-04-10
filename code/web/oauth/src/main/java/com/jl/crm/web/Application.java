@@ -1,7 +1,9 @@
 package com.jl.crm.web;
 
-import com.jl.crm.services.CrmService;
-import com.jl.crm.services.ServiceConfiguration;
+import java.io.IOException;
+
+import javax.servlet.MultipartConfigElement;
+
 import org.apache.catalina.connector.Connector;
 import org.apache.coyote.http11.Http11NioProtocol;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,12 +11,16 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainerFactory;
+import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
 import org.springframework.boot.context.embedded.tomcat.TomcatConnectorCustomizer;
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.Resource;
 import org.springframework.hateoas.config.EnableHypermediaSupport;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -32,8 +38,9 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.O
 import org.springframework.security.oauth2.config.annotation.web.configurers.OAuth2ServerConfigurer;
 import org.springframework.security.oauth2.provider.token.InMemoryTokenStore;
 
-import javax.servlet.MultipartConfigElement;
-import java.io.IOException;
+import com.jl.crm.services.CrmService;
+import com.jl.crm.services.ServiceConfiguration;
+import com.jl.crm.web.CrmUserDetailsService;
 
 
 @ComponentScan
@@ -68,7 +75,8 @@ public class Application extends SpringBootServletInitializer {
     ) {
         return new EmbeddedServletContainerCustomizer() {
             @Override
-            public void customize(ConfigurableEmbeddedServletContainerFactory factory) {
+            public void customize(ConfigurableEmbeddedServletContainer factory) {
+            	                  
                 if (factory instanceof TomcatEmbeddedServletContainerFactory) {
                     TomcatEmbeddedServletContainerFactory containerFactory = (TomcatEmbeddedServletContainerFactory) factory;
                     containerFactory.addConnectorCustomizers(new TomcatConnectorCustomizer() {
@@ -106,6 +114,7 @@ public class Application extends SpringBootServletInitializer {
 
                 }
             }
+
         };
     }
 

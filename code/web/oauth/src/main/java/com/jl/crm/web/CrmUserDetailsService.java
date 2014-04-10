@@ -19,7 +19,7 @@ public class CrmUserDetailsService implements UserDetailsService {
 
 	CrmService crmService;
 
-	CrmUserDetailsService(CrmService crmService) {
+	public CrmUserDetailsService(CrmService crmService) {
 		this.crmService = crmService;
 	}
 
